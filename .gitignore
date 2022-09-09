@@ -1,0 +1,7 @@
+# folders
+/.idea/
+__pycache__/
+fixtures/
+
+# files
+/db.sqlite3
