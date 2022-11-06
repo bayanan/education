@@ -1,13 +1,11 @@
 import os
-
 import django.core.cache.backends.memcached
 from django.urls import reverse_lazy
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
 
 SECRET_KEY = 's+r$*luf)8j&9#1p1ys*vq=%_@m$31r9s(c&zno^7_0b_jpej_'
-
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -22,6 +20,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
     'embed_video',
     'memcache_status',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -34,15 +33,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'courses.middleware.subdomain_course_middleware',
 ]
 
 ROOT_URLCONF = 'education.urls'
+
+REST_FRAMEWORK = {
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        ]
+}
 
 LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../../media/')
 
 TEMPLATES = [
     {
@@ -71,16 +77,9 @@ CACHES = {
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
-CACHE_MIDDLEWARE_SECONDS = 60 * 15 # 15 minutes
+CACHE_MIDDLEWARE_SECONDS = 60 * 15  # 15 minutes
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'education'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -108,3 +107,6 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
